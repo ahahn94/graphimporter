@@ -10,9 +10,7 @@ class CountyRepository:
         self.__shapefile_loader = shapefile_loader
 
     def initialize(self):
-        self.__shapefile_loader.import_file()
-        self.__county_list = self.__shapefile_loader.get_county_list()
-        return
+        self.__county_list = self.__shapefile_loader.load_counties()
 
     def is_initialized(self):
         return self.__county_list is not None
