@@ -14,7 +14,7 @@ class CsvDatasetLoader:
     def __init__(self, filepath: str):
         self.__csv_filepath = filepath
 
-    def import_datasets(self):
+    def load_dataset(self):
         lines_from_csv_file = self.__get_lines_from_file()
         self.__create_datapoints_from_lines(lines_from_csv_file)
         return

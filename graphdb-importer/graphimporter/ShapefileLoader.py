@@ -7,17 +7,17 @@ from graphimporter.CountyList import CountyList
 from graphimporter.ShapeCounty import ShapeCounty
 
 
-class ShapefileImporter:
+class ShapefileLoader:
     __COUNTY_NAME_KEY = "GEN"
     __COUNTY_TYPE_KEY = "BEZ"
     __GEOMETRY_KEY = "geometry"
 
     __shapefile: Union[DataFrame, GeoDataFrame]
-    __counties: CountyList
+    __county_list: CountyList
 
     def __init__(self, filepath):
         self.__filepath = filepath
-        self.__counties = CountyList()
+        self.__county_list = CountyList()
 
     def import_file(self):
         self.__load_shapefile()
@@ -29,7 +29,7 @@ class ShapefileImporter:
             county_type = county_shape[self.__COUNTY_TYPE_KEY]
             county_neighbours = self.__identify_neighbours(county_shape)
             county = ShapeCounty(county_name, county_type, county_neighbours)
-            self.__counties.append(county)
+            self.__county_list.append(county)
 
     def __load_shapefile(self):
         self.__shapefile = geopandas.read_file(self.__filepath)
@@ -40,5 +40,5 @@ class ShapefileImporter:
         names_without_duplicates = list(dict.fromkeys(names))
         return names_without_duplicates
 
-    def get_counties(self):
-        return self.__counties
+    def get_county_list(self):
+        return self.__county_list

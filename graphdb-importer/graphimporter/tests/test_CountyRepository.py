@@ -2,18 +2,18 @@ import unittest
 
 from graphimporter.CountyList import NoSuchCountyException
 from graphimporter.ShapeCounty import ShapeCounty
-from graphimporter.ShapefileImporter import ShapefileImporter
+from graphimporter.ShapefileLoader import ShapefileLoader
 from graphimporter.tests.CountyRepository import CountyRepository, RepositoryNotYetInitializedException
 
 
 class CountyRepositoryTest(unittest.TestCase):
-    __shapefile_importer = None
+    __shapefile_loader = None
     __county_repository = None
 
     @classmethod
     def setUpClass(cls):
-        cls.__shapefile_importer = ShapefileImporter("testfiles/de_county.shp")
-        cls.__county_repository = CountyRepository(cls.__shapefile_importer)
+        cls.__shapefile_loader = ShapefileLoader("testfiles/de_county.shp")
+        cls.__county_repository = CountyRepository(cls.__shapefile_loader)
         cls.__county_repository.initialize()
 
     def test_is_initialized(self):
@@ -28,7 +28,7 @@ class CountyRepositoryTest(unittest.TestCase):
             self.__county_repository.get_county_by_canonic_name("Flänsburg")
 
     def test_get_county_by_canonic_name_uninitialized(self):
-        county_repository = CountyRepository(self.__shapefile_importer)
+        county_repository = CountyRepository(self.__shapefile_loader)
         with (self.assertRaises(RepositoryNotYetInitializedException)):
             county_repository.get_county_by_canonic_name("Flänsburg")
 
