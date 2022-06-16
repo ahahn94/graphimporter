@@ -1,7 +1,7 @@
 import unittest
 
-from ShapefileImporter import ShapefileImporter
-from CountyList import CountyList
+from graphimporter.CountyList import CountyList
+from graphimporter.ShapefileImporter import ShapefileImporter
 
 
 class ShapefileImporterTest(unittest.TestCase):
@@ -9,7 +9,7 @@ class ShapefileImporterTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.shapefile_importer = ShapefileImporter("./testfiles/de_county.shp")
+        cls.shapefile_importer = ShapefileImporter("testfiles/de_county.shp")
         cls.shapefile_importer.import_file()
 
     def testGetCountiesIsCountyList(self):

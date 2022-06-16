@@ -3,8 +3,8 @@ from typing import Union
 from geopandas import geopandas, GeoDataFrame
 from pandas import DataFrame
 
-from CountyList import CountyList
-from ShapeCounty import ShapeCounty
+from graphimporter.CountyList import CountyList
+from graphimporter.ShapeCounty import ShapeCounty
 
 
 class ShapefileImporter:

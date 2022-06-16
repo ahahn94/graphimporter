@@ -1,7 +1,7 @@
 import csv
 from typing import List
 
-from Datapoint import Datapoint
+from graphimporter.Datapoint import Datapoint
 
 
 class CsvDatasetLoader:

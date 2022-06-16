@@ -1,13 +1,13 @@
 import unittest
 
-from Datapoint import Datapoint
+from graphimporter.Datapoint import Datapoint
 
 
 class DatapointTest(unittest.TestCase):
     __datapoint: Datapoint
 
     @classmethod
-    def setUp(cls):
+    def setUpClass(cls):
         cls.__datapoint = Datapoint("Baden-Wuerttemberg", "LK Alb-Donau-Kreis", "00-04", "F", "2022-01-04", 1, 0, 1)
 
     def test_get_age_group(self):

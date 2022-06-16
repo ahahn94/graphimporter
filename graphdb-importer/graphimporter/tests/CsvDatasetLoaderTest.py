@@ -1,7 +1,7 @@
 import unittest
 
-from Datapoint import Datapoint
-from CsvDatasetLoader import CsvDatasetLoader
+from graphimporter.Datapoint import Datapoint
+from graphimporter.CsvDatasetLoader import CsvDatasetLoader
 
 
 class CsvDatasetLoaderTest(unittest.TestCase):
@@ -9,7 +9,7 @@ class CsvDatasetLoaderTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls._datasets_importer = CsvDatasetLoader("./testfiles/covid_de_testing.csv")
+        cls._datasets_importer = CsvDatasetLoader("testfiles/covid_de_testing.csv")
         cls._datasets_importer.import_datasets()
 
     def test_constructor_exists(self):
