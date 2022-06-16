@@ -1,4 +1,5 @@
 from graphimporter.CountyList import CountyList
+from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 from graphimporter.ShapefileLoader import ShapefileLoader
 
 
@@ -19,9 +20,3 @@ class CountyRepository:
         if not self.is_initialized():
             raise RepositoryNotYetInitializedException
         return self.__county_list.get_county_for_canonic_name(canonic_name)
-
-
-class RepositoryNotYetInitializedException(Exception):
-
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)

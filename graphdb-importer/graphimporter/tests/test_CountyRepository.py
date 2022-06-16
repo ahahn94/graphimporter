@@ -3,7 +3,8 @@ import unittest
 from graphimporter.CountyList import NoSuchCountyException
 from graphimporter.ShapeCounty import ShapeCounty
 from graphimporter.ShapefileLoader import ShapefileLoader
-from graphimporter.tests.CountyRepository import CountyRepository, RepositoryNotYetInitializedException
+from graphimporter.CountyRepository import CountyRepository
+from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 
 class CountyRepositoryTest(unittest.TestCase):
