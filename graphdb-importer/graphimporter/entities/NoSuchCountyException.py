@@ -1,0 +1,2 @@
+class NoSuchCountyException(Exception):
+    pass

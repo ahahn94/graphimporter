@@ -12,6 +12,9 @@ class County:
         self._county_type = county_type
         self.determine_canonic_name()
 
+    def get_name(self):
+        return self._name
+
     def get_canonic_name(self):
         return self._canonic_name
 

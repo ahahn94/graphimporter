@@ -1,6 +1,5 @@
 from geopandas import geopandas
 
-from graphimporter.entities.CountyList import CountyList
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 
 
@@ -12,14 +11,14 @@ class ShapefileLoader:
     def __init__(self, filepath, shape_county_factory: ShapeCountyFactory):
         self.__filepath = filepath
         self.__shape_county_factory = shape_county_factory
-        self.__county_list = CountyList()
+        self.__county_list = []
 
     def load_counties(self):
         shapes = self.__load_shapes_from_file()
         return self.__create_counties_from_shapes(shapes)
 
     def __create_counties_from_shapes(self, shapes):
-        county_list = CountyList()
+        county_list = []
         for index, county_shape in shapes.iterrows():
             county = self.__create_county_from_shape(county_shape, shapes)
             county_list.append(county)
