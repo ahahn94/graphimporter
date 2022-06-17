@@ -1,6 +1,7 @@
 import unittest
 
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
+from graphimporter.UnknownCountyTypeException import UnknownCountyTypeException
 from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 
@@ -18,6 +19,13 @@ class ShapeCountyFactoryTest(unittest.TestCase):
         county_neighbours = ['Remscheid', 'Wuppertal', 'Rheinisch-Bergischer Kreis', 'Rhein-Sieg-Kreis', 'Ennepe-Ruhr-Kreis', 'Märkischer Kreis', 'Olpe', 'Altenkirchen (Westerwald)']
         shape_county = self.__shape_county_factory.create(county_name, county_type, county_neighbours)
         self.assertIsInstance(shape_county, ShapeCounty)
+
+    def test_create_county_raises_exception(self):
+        county_name = "Oberbergischer Kreis"
+        county_type = "Städteregion"
+        county_neighbours = ['Remscheid', 'Wuppertal', 'Rheinisch-Bergischer Kreis', 'Rhein-Sieg-Kreis', 'Ennepe-Ruhr-Kreis', 'Märkischer Kreis', 'Olpe', 'Altenkirchen (Westerwald)']
+        with (self.assertRaises(UnknownCountyTypeException)):
+            shape_county = self.__shape_county_factory.create(county_name, county_type, county_neighbours)
 
 
 if __name__ == '__main__':

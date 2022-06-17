@@ -1,0 +1,2 @@
+class UnknownCountyTypeException(Exception):
+    pass
