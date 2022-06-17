@@ -1,0 +1,2 @@
+class UniqueKeyCollisionException(Exception):
+    pass
