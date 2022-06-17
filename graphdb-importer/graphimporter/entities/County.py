@@ -17,3 +17,12 @@ class County:
 
     def get_canonic_name(self):
         return self._canonic_name
+
+    def get_county_type(self):
+        return self._county_type
+
+    def same_county(self, other_county: 'County') -> bool:
+        names_match = self._name == other_county.get_name()
+        canonic_names_match = self._canonic_name == other_county.get_canonic_name()
+        types_match = self._county_type == other_county.get_county_type()
+        return names_match and canonic_names_match and types_match

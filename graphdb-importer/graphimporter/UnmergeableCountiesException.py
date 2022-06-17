@@ -1,0 +1,2 @@
+class UnmergeableCountiesException(Exception):
+    pass
