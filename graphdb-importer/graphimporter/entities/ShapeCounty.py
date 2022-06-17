@@ -8,12 +8,9 @@ class ShapeCounty(County):
 
     __neighbours: List[str]
 
-    def __init__(self, name: str, county_type: CountyType, neighbours):
-        super().__init__(name, county_type)
+    def __init__(self, name: str, county_type: CountyType, canonic_name: str, neighbours):
+        super().__init__(name, county_type, canonic_name)
         self.__neighbours = neighbours
-
-    def determine_canonic_name(self):
-        self._canonic_name = self._name
 
     def get_neighbours(self):
         return self.__neighbours

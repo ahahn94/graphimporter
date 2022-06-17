@@ -15,7 +15,8 @@ class ShapeCountyRepositoryTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        shape_county_factory = ShapeCountyFactory(CountyNameNormalizer)
+        name_normalizer = CountyNameNormalizer()
+        shape_county_factory = ShapeCountyFactory(name_normalizer)
         cls.__shapefile_loader = ShapefileLoader("testfiles/de_county.shp", shape_county_factory)
         cls.__shape_county_repository = ShapeCountyRepository(cls.__shapefile_loader)
         cls.__shape_county_repository.initialize()
@@ -24,7 +25,7 @@ class ShapeCountyRepositoryTest(unittest.TestCase):
         self.assertEqual(self.__shape_county_repository.is_initialized(), True)
 
     def test_get_county_by_canonic_name_returns_county(self):
-        county = self.__shape_county_repository.get_county_by_canonic_name("Flensburg")
+        county = self.__shape_county_repository.get_county_by_canonic_name("SK Flensburg")
         self.assertIsInstance(county, ShapeCounty)
 
     def test_get_county_by_canonic_name_not_found(self):

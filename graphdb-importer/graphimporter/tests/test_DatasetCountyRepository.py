@@ -16,7 +16,8 @@ class DatasetCountyRepositoryTest(unittest.TestCase):
     def setUpClass(cls):
         csv_dataset_loader = CsvDatasetLoader("testfiles/covid_de_testing.csv")
         datapoint_repository = DatapointRepository(csv_dataset_loader)
-        dataset_county_factory = DatasetCountyFactory(CountyNameNormalizer)
+        name_normalizer = CountyNameNormalizer()
+        dataset_county_factory = DatasetCountyFactory(name_normalizer)
         cls.__dataset_county_repository = DatasetCountyRepository(datapoint_repository, dataset_county_factory)
         cls.__dataset_county_repository.initialize()
 
