@@ -4,7 +4,7 @@ from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 
 
-class CountyRepository:
+class ShapeCountyRepository:
     __shapefile_loader: ShapefileLoader
     __county_list: [ShapeCounty] = None
     __county_name_index = None

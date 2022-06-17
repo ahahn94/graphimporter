@@ -5,36 +5,36 @@ from graphimporter.entities.NoSuchCountyException import NoSuchCountyException
 from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
-from graphimporter.repositories.CountyRepository import CountyRepository
+from graphimporter.repositories.ShapeCountyRepository import ShapeCountyRepository
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 
-class CountyRepositoryTest(unittest.TestCase):
+class ShapeCountyRepositoryTest(unittest.TestCase):
     __shapefile_loader = None
-    __county_repository = None
+    __shape_county_repository = None
 
     @classmethod
     def setUpClass(cls):
         shape_county_factory = ShapeCountyFactory(CountyNameNormalizer)
         cls.__shapefile_loader = ShapefileLoader("testfiles/de_county.shp", shape_county_factory)
-        cls.__county_repository = CountyRepository(cls.__shapefile_loader)
-        cls.__county_repository.initialize()
+        cls.__shape_county_repository = ShapeCountyRepository(cls.__shapefile_loader)
+        cls.__shape_county_repository.initialize()
 
     def test_is_initialized(self):
-        self.assertEqual(self.__county_repository.is_initialized(), True)
+        self.assertEqual(self.__shape_county_repository.is_initialized(), True)
 
     def test_get_county_by_canonic_name_returns_county(self):
-        county = self.__county_repository.get_county_by_canonic_name("Flensburg")
+        county = self.__shape_county_repository.get_county_by_canonic_name("Flensburg")
         self.assertIsInstance(county, ShapeCounty)
 
     def test_get_county_by_canonic_name_not_found(self):
         with (self.assertRaises(NoSuchCountyException)):
-            self.__county_repository.get_county_by_canonic_name("Flänsburg")
+            self.__shape_county_repository.get_county_by_canonic_name("Flänsburg")
 
     def test_get_county_by_canonic_name_uninitialized(self):
-        county_repository = CountyRepository(self.__shapefile_loader)
+        shape_county_repository = ShapeCountyRepository(self.__shapefile_loader)
         with (self.assertRaises(RepositoryNotYetInitializedException)):
-            county_repository.get_county_by_canonic_name("Flänsburg")
+            shape_county_repository.get_county_by_canonic_name("Flänsburg")
 
 
 if __name__ == '__main__':
