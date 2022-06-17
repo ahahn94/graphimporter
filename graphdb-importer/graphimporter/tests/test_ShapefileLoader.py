@@ -1,7 +1,7 @@
 import unittest
 
-from graphimporter.CountyList import CountyList
-from graphimporter.ShapefileLoader import ShapefileLoader
+from graphimporter.entities.CountyList import CountyList
+from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 
 
 class ShapefileLoaderTest(unittest.TestCase):

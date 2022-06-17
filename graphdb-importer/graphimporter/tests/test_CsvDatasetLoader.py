@@ -1,7 +1,7 @@
 import unittest
 
-from graphimporter.Datapoint import Datapoint
-from graphimporter.CsvDatasetLoader import CsvDatasetLoader
+from graphimporter.entities.Datapoint import Datapoint
+from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 
 
 class CsvDatasetLoaderTest(unittest.TestCase):

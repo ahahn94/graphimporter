@@ -1,9 +1,9 @@
 import unittest
 
-from graphimporter.CountyList import NoSuchCountyException
-from graphimporter.ShapeCounty import ShapeCounty
-from graphimporter.ShapefileLoader import ShapefileLoader
-from graphimporter.CountyRepository import CountyRepository
+from graphimporter.entities.CountyList import NoSuchCountyException
+from graphimporter.entities.ShapeCounty import ShapeCounty
+from graphimporter.loaders.ShapefileLoader import ShapefileLoader
+from graphimporter.repositories.CountyRepository import CountyRepository
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 

@@ -1,7 +1,7 @@
 import unittest
 
-from graphimporter.CsvDatasetLoader import CsvDatasetLoader
-from graphimporter.DatapointRepository import DatapointRepository
+from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
+from graphimporter.repositories.DatapointRepository import DatapointRepository
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 

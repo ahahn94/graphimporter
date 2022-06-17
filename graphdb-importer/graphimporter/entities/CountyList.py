@@ -1,4 +1,4 @@
-from graphimporter.County import County
+from graphimporter.entities.County import County
 
 
 class CountyList:

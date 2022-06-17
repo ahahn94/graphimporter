@@ -1,7 +1,7 @@
 from geopandas import geopandas
 
-from graphimporter.CountyList import CountyList
-from graphimporter.ShapeCounty import ShapeCounty
+from graphimporter.entities.CountyList import CountyList
+from graphimporter.entities.ShapeCounty import ShapeCounty
 
 
 class ShapefileLoader:

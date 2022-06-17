@@ -1,7 +1,7 @@
 from typing import List
 
-from graphimporter.CsvDatasetLoader import CsvDatasetLoader
-from graphimporter.Datapoint import Datapoint
+from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
+from graphimporter.entities.Datapoint import Datapoint
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 

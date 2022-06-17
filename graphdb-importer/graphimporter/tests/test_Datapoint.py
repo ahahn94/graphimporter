@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.Datapoint import Datapoint
+from graphimporter.entities.Datapoint import Datapoint
 
 
 class DatapointTest(unittest.TestCase):

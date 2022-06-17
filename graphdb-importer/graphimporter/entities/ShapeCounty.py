@@ -1,6 +1,6 @@
 from typing import List
 
-from graphimporter.County import County
+from graphimporter.entities.County import County
 
 
 class ShapeCounty(County):

@@ -1,6 +1,6 @@
-from graphimporter.CountyList import CountyList
+from graphimporter.entities.CountyList import CountyList
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
-from graphimporter.ShapefileLoader import ShapefileLoader
+from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 
 
 class CountyRepository:
