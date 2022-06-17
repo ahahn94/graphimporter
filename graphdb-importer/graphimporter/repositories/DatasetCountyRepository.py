@@ -1,14 +1,16 @@
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
-from graphimporter.entities.DatasetCounty import DatasetCounty
+from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.repositories.DatapointRepository import DatapointRepository
 
 
 class DatasetCountyRepository:
+    __dataset_county_factory: DatasetCountyFactory
     __datapoint_repository: DatapointRepository
     __county_list = None
 
-    def __init__(self, datapoint_repository):
+    def __init__(self, datapoint_repository, dataset_county_factory):
         self.__datapoint_repository = datapoint_repository
+        self.__dataset_county_factory = dataset_county_factory
 
     def initialize(self):
         self.__datapoint_repository.initialize()
@@ -23,9 +25,9 @@ class DatasetCountyRepository:
             raise RepositoryNotYetInitializedException
         return self.__county_list
 
-    @staticmethod
-    def __create_counties_from_county_names(county_names):
+    def __create_counties_from_county_names(self, county_names):
         county_list = []
         for county_name in county_names:
-            county_list.append(DatasetCounty(county_name, ""))
+            dataset_county = self.__dataset_county_factory.create(county_name)
+            county_list.append(dataset_county)
         return county_list

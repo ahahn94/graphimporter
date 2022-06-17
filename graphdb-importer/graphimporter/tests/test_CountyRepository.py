@@ -1,7 +1,9 @@
 import unittest
 
+from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.entities.CountyList import NoSuchCountyException
 from graphimporter.entities.ShapeCounty import ShapeCounty
+from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 from graphimporter.repositories.CountyRepository import CountyRepository
 from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
@@ -13,7 +15,8 @@ class CountyRepositoryTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.__shapefile_loader = ShapefileLoader("testfiles/de_county.shp")
+        shape_county_factory = ShapeCountyFactory(CountyNameNormalizer)
+        cls.__shapefile_loader = ShapefileLoader("testfiles/de_county.shp", shape_county_factory)
         cls.__county_repository = CountyRepository(cls.__shapefile_loader)
         cls.__county_repository.initialize()
 

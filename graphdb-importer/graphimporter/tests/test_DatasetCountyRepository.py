@@ -1,6 +1,8 @@
 import unittest
 
+from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.entities.County import County
+from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.repositories.DatapointRepository import DatapointRepository
 from graphimporter.repositories.DatasetCountyRepository import DatasetCountyRepository
@@ -14,7 +16,8 @@ class DatasetCountyRepositoryTest(unittest.TestCase):
     def setUpClass(cls):
         csv_dataset_loader = CsvDatasetLoader("testfiles/covid_de_testing.csv")
         datapoint_repository = DatapointRepository(csv_dataset_loader)
-        cls.__dataset_county_repository = DatasetCountyRepository(datapoint_repository)
+        dataset_county_factory = DatasetCountyFactory(CountyNameNormalizer)
+        cls.__dataset_county_repository = DatasetCountyRepository(datapoint_repository, dataset_county_factory)
         cls.__dataset_county_repository.initialize()
 
     def test_get_county_list_is_list_of_county(self):

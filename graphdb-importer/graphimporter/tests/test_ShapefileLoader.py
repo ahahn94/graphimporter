@@ -1,6 +1,8 @@
 import unittest
 
+from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.entities.CountyList import CountyList
+from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 
 
@@ -9,7 +11,9 @@ class ShapefileLoaderTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        shapefile_loader = ShapefileLoader("testfiles/de_county.shp")
+        name_normalizer = CountyNameNormalizer()
+        shape_county_factory = ShapeCountyFactory(name_normalizer)
+        shapefile_loader = ShapefileLoader("testfiles/de_county.shp", shape_county_factory)
         cls.__county_list = shapefile_loader.load_counties()
 
     def test_get_county_list_is_county_list(self):

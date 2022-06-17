@@ -1,7 +1,7 @@
 from geopandas import geopandas
 
 from graphimporter.entities.CountyList import CountyList
-from graphimporter.entities.ShapeCounty import ShapeCounty
+from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 
 
 class ShapefileLoader:
@@ -9,8 +9,9 @@ class ShapefileLoader:
     __COUNTY_TYPE_KEY = "BEZ"
     __GEOMETRY_KEY = "geometry"
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, shape_county_factory: ShapeCountyFactory):
         self.__filepath = filepath
+        self.__shape_county_factory = shape_county_factory
         self.__county_list = CountyList()
 
     def load_counties(self):
@@ -28,7 +29,7 @@ class ShapefileLoader:
         county_name = county_shape[self.__COUNTY_NAME_KEY]
         county_type = county_shape[self.__COUNTY_TYPE_KEY]
         county_neighbours = self.__identify_neighbours(county_shape, shapes)
-        county = ShapeCounty(county_name, county_type, county_neighbours)
+        county = self.__shape_county_factory.create(county_name, county_type, county_neighbours)
         return county
 
     def __load_shapes_from_file(self):
