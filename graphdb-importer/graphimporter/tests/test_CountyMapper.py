@@ -1,28 +1,31 @@
 import unittest
 
+from graphimporter.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
-from graphimporter.entities.NoSuchCountyException import NoSuchCountyException
+from graphimporter.entities.MappedCounty import MappedCounty
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
+from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
+from graphimporter.loaders.ShapefileLoader import ShapefileLoader
+from graphimporter.repositories.DatapointRepository import DatapointRepository
 from graphimporter.repositories.DatasetCountyRepository import DatasetCountyRepository
 from graphimporter.repositories.ShapeCountyRepository import ShapeCountyRepository
-from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
-from graphimporter.repositories.DatapointRepository import DatapointRepository
-from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 
 
 class CountyMapperTest(unittest.TestCase):
 
-    __shape_county_repository = None
-    __dataset_county_repository = None
+    __county_mapper: CountyMapper = None
+    __shape_county_repository: ShapeCountyRepository = None
+    __dataset_county_repository: DatasetCountyRepository = None
 
     @classmethod
     def setUpClass(cls):
         name_normalizer = CountyNameNormalizer()
         cls.__dataset_county_repository = cls.instantiate_dataset_county_repository(name_normalizer)
-        cls.__dataset_county_repository.initialize()
         cls.__shape_county_repository = cls.instantiate_shape_county_repository(name_normalizer)
-        cls.__shape_county_repository.initialize()
+        cls.__county_mapper = CountyMapper(cls.__dataset_county_repository, cls.__shape_county_repository)
+        cls.__county_mapper.initialize()
+        cls.__mapped_counties = cls.__county_mapper.map_counties()
 
     @classmethod
     def instantiate_shape_county_repository(cls, name_normalizer):
@@ -37,15 +40,12 @@ class CountyMapperTest(unittest.TestCase):
         dataset_county_factory = DatasetCountyFactory(name_normalizer)
         return DatasetCountyRepository(datapoint_repository, dataset_county_factory)
 
-    def test_mapping(self):
-        exception_counter = 0
-        for county in self.__dataset_county_repository.get_county_list():
-            try:
-                self.__shape_county_repository.get_county_by_canonic_name(county.get_canonic_name())
-            except NoSuchCountyException as exception:
-                exception_counter = exception_counter + 1
-                print(exception)
-        self.assertEqual(exception_counter, 0)
+    def test_map_counties_returns_list_of_mapped_county(self):
+        self.assertEqual(type(self.__mapped_counties), type([MappedCounty]))
+
+    def test_map_counties_returns_right_number_of_elements(self):
+        number_of_dataset_counties = len(self.__dataset_county_repository.get_county_list())
+        self.assertEqual(len(self.__mapped_counties), number_of_dataset_counties)
 
 
 if __name__ == '__main__':
