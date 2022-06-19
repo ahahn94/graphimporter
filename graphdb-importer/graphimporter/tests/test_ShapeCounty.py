@@ -31,6 +31,18 @@ class ShapeCountyTest(unittest.TestCase):
         with (self.assertRaises(UnmergeableCountiesException)):
             self.__pinneberg_1.merge(self.__flensburg_1)
 
+    def test_construtor_removes_neighbour_duplicates(self):
+        county_with_duplicate_neighbours = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
+                                                       ['LK Segeberg', 'LK Steinburg', 'SK Hamburg', 'LK Steinburg',
+                                                        'SK Hamburg', 'LK Stade'])
+        self.assertEqual(len(county_with_duplicate_neighbours.get_neighbours()), 4)
+
+    def test_constructor_removes_self_from_neighbours(self):
+        county_having_self_as_neighbour = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
+                                                      ['LK Segeberg', 'LK Pinneberg', 'LK Steinburg', 'LK Pinneberg',
+                                                       'SK Hamburg', 'LK Stade'])
+        self.assertNotIn("LK Pinneberg", county_having_self_as_neighbour.get_neighbours())
+
 
 if __name__ == '__main__':
     unittest.main()

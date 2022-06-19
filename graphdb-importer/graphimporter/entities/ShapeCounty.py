@@ -11,7 +11,7 @@ class ShapeCounty(County):
 
     def __init__(self, name: str, county_type: CountyType, canonic_name: str, neighbours):
         super().__init__(name, county_type, canonic_name)
-        self.__neighbours = neighbours
+        self.__neighbours = self.__deduplicate_neighbours(neighbours)
 
     def get_neighbours(self):
         return self.__neighbours
@@ -28,10 +28,15 @@ class ShapeCounty(County):
             raise UnmergeableCountiesException
 
     def __merge_neighbours(self, other):
-        own_set = set(self.__neighbours)
-        other_set = set(other.get_neighbours())
-        merged_set_without_duplicates = own_set | other_set
-        return list(merged_set_without_duplicates)
+        neighbours = self.__neighbours + other.__neighbours
+        deduplicated_neighbours = self.__deduplicate_neighbours(neighbours)
+        return deduplicated_neighbours
+
+    def __deduplicate_neighbours(self, neighbours):
+        unique_neighbours = set(neighbours)
+        if self._canonic_name in unique_neighbours:
+            unique_neighbours.remove(self._canonic_name)
+        return list(unique_neighbours)
 
     def equals(self, other: 'ShapeCounty'):
         county_matches = self.same_county(other)
