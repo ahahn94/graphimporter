@@ -1,5 +1,6 @@
 from geopandas import geopandas
 
+from graphimporter.entities.RawCounty import RawCounty
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 
 
@@ -28,14 +29,16 @@ class ShapefileLoader:
         county_name = county_shape[self.__COUNTY_NAME_KEY]
         county_type = county_shape[self.__COUNTY_TYPE_KEY]
         county_neighbours = self.__identify_neighbours(county_shape, shapes)
-        county = self.__shape_county_factory.create(county_name, county_type, county_neighbours)
+        county = self.__shape_county_factory.create(RawCounty(county_name, county_type), county_neighbours)
         return county
 
     def __load_shapes_from_file(self):
         return geopandas.read_file(self.__filepath)
 
     def __identify_neighbours(self, county_shape, shapes):
-        neighbours = shapes[shapes.touches(county_shape[self.__GEOMETRY_KEY])]
-        names = neighbours[self.__COUNTY_NAME_KEY].tolist()
-        names_without_duplicates = list(dict.fromkeys(names))
-        return names_without_duplicates
+        neighbour_shapes = shapes[shapes.touches(county_shape[self.__GEOMETRY_KEY])]
+        neighbours = []
+        for county_name, county_type in zip(neighbour_shapes[self.__COUNTY_NAME_KEY],
+                                            neighbour_shapes[self.__COUNTY_TYPE_KEY]):
+            neighbours.append(RawCounty(county_name, county_type))
+        return neighbours
