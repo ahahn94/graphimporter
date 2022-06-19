@@ -2,7 +2,7 @@ import unittest
 
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.exceptions.UniqueKeyCollisionException import UniqueKeyCollisionException
-from graphimporter.entities.County import County
+from graphimporter.entities.TypedCounty import TypedCounty
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.repositories.DatapointRepository import DatapointRepository
@@ -24,7 +24,7 @@ class DatasetCountyRepositoryTest(unittest.TestCase):
 
     def test_get_county_list_is_list_of_county(self):
         county_list = self.__dataset_county_repository.get_county_list()
-        self.assertEqual(type(county_list), type([County]))
+        self.assertEqual(type(county_list), type([TypedCounty]))
 
     def test_get_county_list_is_not_empty(self):
         county_list = self.__dataset_county_repository.get_county_list()

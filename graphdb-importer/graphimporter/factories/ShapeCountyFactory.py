@@ -18,7 +18,7 @@ class ShapeCountyFactory:
         canonic_name = self.__get_canonic_name(raw_county)
         county_type = self.__extract_county_type_from_type_name(raw_county.type_name)
         normalized_neighbours = self.__canonicalize_neighbours(neighbours)
-        return ShapeCounty(raw_county.county_name, county_type, canonic_name, normalized_neighbours)
+        return ShapeCounty(county_type, canonic_name, normalized_neighbours)
 
     def __get_canonic_name(self, raw_county: RawCounty):
         if raw_county.__str__() not in self.__canonic_names:

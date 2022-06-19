@@ -2,28 +2,27 @@ from collections import Counter
 from typing import List
 
 from graphimporter.exceptions.UnmergeableCountiesException import UnmergeableCountiesException
-from graphimporter.entities.County import County
+from graphimporter.entities.TypedCounty import TypedCounty
 from graphimporter.entities.CountyType import CountyType
 
 
-class ShapeCounty(County):
+class ShapeCounty(TypedCounty):
     __neighbours: List[str]
 
-    def __init__(self, name: str, county_type: CountyType, canonic_name: str, neighbours):
-        super().__init__(name, county_type, canonic_name)
+    def __init__(self, county_type: CountyType, canonic_name: str, neighbours):
+        super().__init__(county_type, canonic_name)
         self.__neighbours = self.__deduplicate_neighbours(neighbours)
 
     def get_neighbours(self):
         return self.__neighbours
 
     def __str__(self) -> str:
-        return "'name': {}, 'canonic_name': {}, 'neighbours': {}".format(self._name, self._canonic_name,
-                                                                         self.__neighbours)
+        return "'canonic_name': {}, 'neighbours': {}".format(self._canonic_name, self.__neighbours)
 
     def merge(self, other: 'ShapeCounty'):
         if self.same_county(other):
             neighbours = self.__merge_neighbours(other)
-            return ShapeCounty(self._name, self._county_type, self._canonic_name, neighbours)
+            return ShapeCounty(self._county_type, self._canonic_name, neighbours)
         else:
             raise UnmergeableCountiesException
 

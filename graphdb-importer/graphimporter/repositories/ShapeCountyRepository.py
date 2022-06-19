@@ -23,7 +23,7 @@ class ShapeCountyRepository:
             self.__add_canonic_county_name_to_index(county)
 
     def __add_canonic_county_name_to_index(self, county):
-        if county.get_name() not in self.__canonic_county_name_index:
+        if county.get_canonic_name() not in self.__canonic_county_name_index:
             self.__canonic_county_name_index[county.get_canonic_name()] = county
         else:
             indexed_county = self.__canonic_county_name_index.get(county.get_canonic_name())

@@ -9,12 +9,11 @@ class ShapeCountyTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.__flensburg_1 = ShapeCounty("Flensburg", CountyType.SK, "Flensburg", ['Flensburg', 'Schleswig-Flensburg'])
-        cls.__flensburg_2 = ShapeCounty("Flensburg", CountyType.SK, "Flensburg", ['Schleswig-Flensburg', 'Flensburg'])
-        cls.__pinneberg_1 = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg", ['Pinneberg', 'Stade'])
-        cls.__pinneberg_2 = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
-                                        ['Pinneberg', 'Steinburg', 'Hamburg'])
-        cls.__pinneberg_complete = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
+        cls.__flensburg_1 = ShapeCounty(CountyType.SK, "Flensburg", ['Flensburg', 'Schleswig-Flensburg'])
+        cls.__flensburg_2 = ShapeCounty(CountyType.SK, "Flensburg", ['Schleswig-Flensburg', 'Flensburg'])
+        cls.__pinneberg_1 = ShapeCounty(CountyType.LK, "LK Pinneberg", ['Pinneberg', 'Stade'])
+        cls.__pinneberg_2 = ShapeCounty(CountyType.LK, "LK Pinneberg", ['Pinneberg', 'Steinburg', 'Hamburg'])
+        cls.__pinneberg_complete = ShapeCounty(CountyType.LK, "LK Pinneberg",
                                                ['Pinneberg', 'Steinburg', 'Hamburg', 'Stade'])
 
     def test_compare_match(self):
@@ -32,13 +31,13 @@ class ShapeCountyTest(unittest.TestCase):
             self.__pinneberg_1.merge(self.__flensburg_1)
 
     def test_construtor_removes_neighbour_duplicates(self):
-        county_with_duplicate_neighbours = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
+        county_with_duplicate_neighbours = ShapeCounty(CountyType.LK, "LK Pinneberg",
                                                        ['LK Segeberg', 'LK Steinburg', 'SK Hamburg', 'LK Steinburg',
                                                         'SK Hamburg', 'LK Stade'])
         self.assertEqual(len(county_with_duplicate_neighbours.get_neighbours()), 4)
 
     def test_constructor_removes_self_from_neighbours(self):
-        county_having_self_as_neighbour = ShapeCounty("Pinneberg", CountyType.LK, "LK Pinneberg",
+        county_having_self_as_neighbour = ShapeCounty(CountyType.LK, "LK Pinneberg",
                                                       ['LK Segeberg', 'LK Pinneberg', 'LK Steinburg', 'LK Pinneberg',
                                                        'SK Hamburg', 'LK Stade'])
         self.assertNotIn("LK Pinneberg", county_having_self_as_neighbour.get_neighbours())
