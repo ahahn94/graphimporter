@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.UnmergeableCountiesException import UnmergeableCountiesException
+from graphimporter.exceptions.UnmergeableCountiesException import UnmergeableCountiesException
 from graphimporter.entities.CountyType import CountyType
 from graphimporter.entities.ShapeCounty import ShapeCounty
 

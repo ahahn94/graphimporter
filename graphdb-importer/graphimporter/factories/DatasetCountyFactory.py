@@ -1,5 +1,5 @@
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
-from graphimporter.UnknownCountyTypeException import UnknownCountyTypeException
+from graphimporter.exceptions.UnknownCountyTypeException import UnknownCountyTypeException
 from graphimporter.entities.CountyType import CountyType
 from graphimporter.entities.DatasetCounty import DatasetCounty
 

@@ -1,4 +1,4 @@
-from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
+from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 from graphimporter.entities.NoSuchCountyException import NoSuchCountyException
 from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader

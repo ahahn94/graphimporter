@@ -2,7 +2,7 @@ from typing import List
 
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.entities.Datapoint import Datapoint
-from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
+from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 
 class DatapointRepository:

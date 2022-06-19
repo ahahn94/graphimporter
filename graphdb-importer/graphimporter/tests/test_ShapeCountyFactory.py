@@ -1,7 +1,7 @@
 import unittest
 
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
-from graphimporter.UnknownCountyTypeException import UnknownCountyTypeException
+from graphimporter.exceptions.UnknownCountyTypeException import UnknownCountyTypeException
 from graphimporter.entities.RawCounty import RawCounty
 from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory

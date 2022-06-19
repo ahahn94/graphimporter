@@ -24,7 +24,6 @@ class ShapefileLoaderTest(unittest.TestCase):
 
     def test_county_has_neighbours(self):
         first_county = self.__county_list[0]
-        print(first_county.get_neighbours())
         self.assertGreater(len(first_county.get_neighbours()), 0)
 
 

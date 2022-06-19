@@ -1,7 +1,7 @@
 from collections import Counter
 from typing import List
 
-from graphimporter.UnmergeableCountiesException import UnmergeableCountiesException
+from graphimporter.exceptions.UnmergeableCountiesException import UnmergeableCountiesException
 from graphimporter.entities.County import County
 from graphimporter.entities.CountyType import CountyType
 

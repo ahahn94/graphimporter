@@ -1,7 +1,7 @@
 import unittest
 
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
-from graphimporter.UniqueKeyCollisionException import UniqueKeyCollisionException
+from graphimporter.exceptions.UniqueKeyCollisionException import UniqueKeyCollisionException
 from graphimporter.entities.County import County
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader

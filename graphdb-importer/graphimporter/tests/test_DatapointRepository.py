@@ -2,7 +2,7 @@ import unittest
 
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.repositories.DatapointRepository import DatapointRepository
-from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
+from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 
 class DatapointRepositoryTest(unittest.TestCase):

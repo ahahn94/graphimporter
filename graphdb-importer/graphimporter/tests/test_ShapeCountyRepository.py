@@ -6,7 +6,7 @@ from graphimporter.entities.ShapeCounty import ShapeCounty
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 from graphimporter.repositories.ShapeCountyRepository import ShapeCountyRepository
-from graphimporter.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
+from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 
 
 class ShapeCountyRepositoryTest(unittest.TestCase):
