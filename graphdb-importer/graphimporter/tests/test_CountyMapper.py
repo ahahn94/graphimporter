@@ -42,10 +42,11 @@ class CountyMapperTest(unittest.TestCase):
         for county in self.__dataset_county_repository.get_county_list():
             try:
                 self.__shape_county_repository.get_county_by_canonic_name(county.get_canonic_name())
-            except NoSuchCountyException:
-                if "Berlin" not in county.get_canonic_name():
-                    exception_counter += 1
+            except NoSuchCountyException as exception:
+                exception_counter = exception_counter + 1
+                print(exception)
         self.assertEqual(exception_counter, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -36,8 +36,8 @@ class ShapeCountyRepository:
     def get_county_by_canonic_name(self, canonic_name):
         if not self.is_initialized():
             raise RepositoryNotYetInitializedException
-        if "Berlin" in canonic_name and canonic_name != "Berlin":
-            return self.get_county_by_canonic_name("Berlin")
+        if "Berlin" in canonic_name and canonic_name != "SK Berlin":
+            return self.get_county_by_canonic_name("SK Berlin")
         if canonic_name in self.__canonic_county_name_index:
             return self.__canonic_county_name_index.get(canonic_name)
         else:
