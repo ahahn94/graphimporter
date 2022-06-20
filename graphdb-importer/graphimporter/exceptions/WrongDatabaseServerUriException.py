@@ -1,0 +1,2 @@
+class WrongDatabaseServerUriException(Exception):
+    pass
