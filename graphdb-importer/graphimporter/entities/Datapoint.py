@@ -42,3 +42,20 @@ class Datapoint:
 
     def get_state(self):
         return self.__state
+
+    def __str__(self):
+        return f"Datapoint {{ state: {self.__state}, county: {self.__county}, age_group: {self.__age_group}, " \
+               f"gender: {self.__gender}, date: {self.__date}, cases: {self.__cases}, deaths: {self.__deaths}, " \
+               f"recovered: {self.__recovered} }}"
+
+    def __eq__(self, other):
+        age_match = self.__age_group == other.get_age_group()
+        cases_match = self.__cases == other.get_cases()
+        county_match = self.__county == other.get_county()
+        date_match = self.__date == other.get_date()
+        deaths_match = self.__deaths == other.get_deaths()
+        gender_match = self.__gender == other.get_gender()
+        recovered_match = self.__recovered == other.get_recovered()
+        state_match = self.__state == other.get_state()
+        return age_match and cases_match and county_match and date_match and deaths_match and gender_match \
+            and recovered_match and state_match
