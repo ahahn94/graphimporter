@@ -41,8 +41,10 @@ class Neo4jRepository:
         return exists
 
     def add_neighbour_county_relationship(self, base_county: str, neighbour_county: str):
-        template = f"MATCH (base: Datapoint) MATCH(neighbour: Datapoint) WHERE base.countyName = '{base_county}' AND " \
-                   f"neighbour.countyName = '{neighbour_county}' AND neighbour.ageGroup = base.ageGroup AND " \
+        template = f"MATCH (base: Datapoint) MATCH(neighbour: Datapoint) " \
+                   f"WHERE base.countyName = '{base_county}' AND neighbour.countyName = '{neighbour_county}' AND " \
+                   f"base.countyName <> neighbour.countyName AND " \
+                   f"neighbour.ageGroup = base.ageGroup AND " \
                    f"neighbour.date = base.date AND neighbour.gender = base.gender CREATE (base)-[" \
                    f"r:NEIGHBOUR_COUNTY]->(neighbour) RETURN r "
         statement = template.format(base_county=base_county, neighbour_county=neighbour_county)
