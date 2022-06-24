@@ -57,6 +57,35 @@ class Neo4jRepository:
         result_2d_array = self.__neo4j_database_connection.run_query(statement)
         return self.__datapoint_node_mapper.nodes_to_entities(result_2d_array[0])
 
+    def add_gender_relationships(self):
+        statement = "MATCH (a: Datapoint) Match (b: Datapoint) " \
+                    "WHERE a.gender <> b.gender " \
+                    "AND a.ageGroup = b.ageGroup " \
+                    "AND a.date = b.date " \
+                    "AND a.countyName = b.countyName " \
+                    "CREATE (a)-[r: OTHER_GENDER]->(b) RETURN r"
+        self.__neo4j_database_connection.run_query(statement)
+
+    def add_younger_relationship(self, younger: str, older: str):
+        template = "MATCH (a: Datapoint) Match (b: Datapoint) " \
+                   "WHERE a.ageGroup = \"{younger}\" AND b.ageGroup = \"{older}\" " \
+                   "AND a.gender = b.gender " \
+                   "AND a.date = b.date " \
+                   "AND a.countyName = b.countyName " \
+                   "CREATE (a)-[r: IS_ONE_YOUNGER_THAN]->(b) RETURN r"
+        statement = template.format(younger=younger, older=older)
+        self.__neo4j_database_connection.run_query(statement)
+
+    def add_older_relationship(self, older: str, younger: str):
+        template = "MATCH (a: Datapoint) Match (b: Datapoint) " \
+                   "WHERE a.ageGroup = \"{older}\" AND b.ageGroup = \"{younger}\" " \
+                   "AND a.gender = b.gender " \
+                   "AND a.date = b.date " \
+                   "AND a.countyName = b.countyName " \
+                   "CREATE (a)-[r: IS_ONE_OLDER_THAN]->(b) RETURN r"
+        statement = template.format(younger=younger, older=older)
+        self.__neo4j_database_connection.run_query(statement)
+
     def __get_create_statement_for_datapoint(self, datapoint: Datapoint):
         template = "CREATE (d: {datapointDefinition});"
         return template.format(datapointDefinition=self.__datapoint_node_mapper.entity_to_node_string(datapoint))

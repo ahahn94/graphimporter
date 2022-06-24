@@ -86,12 +86,39 @@ class GraphImporter:
                             self.__total_number_of_datapoints, "Creating Datapoints...")
 
     def create_relations(self):
+        self.create_neighbour_relationships()
+        self.create_gender_relationships()
+        self.create_age_group_relationships()
+        print("Completed.")
+
+    def create_neighbour_relationships(self):
         mapped_counties = self.__mapped_county_repository.get_mapped_counties()
         self.__initialize_neighbour_counting(mapped_counties)
         for mapped_county in mapped_counties:
             self.__create_neighbours_for_county(mapped_county)
         self.__mesh_berlin_districts()
-        print("Completed.")
+
+    def create_age_group_relationships(self):
+        print("Adding Age Group Relationships")
+        age_groups = ["00-04", "05-14", "15-34", "35-59", "60-79", "80-99", "NA"]
+        for index, element in enumerate(age_groups):
+            previous_group, current_group, next_group = self.__get_previous_current_next(age_groups, index)
+            if previous_group is not None:
+                self.__neo4j_repository.add_younger_relationship(previous_group, current_group)
+            if next_group is not None:
+                self.__neo4j_repository.add_older_relationship(next_group, current_group)
+
+    def __get_previous_current_next(self, elements: [], index):
+        previous_index = index - 1
+        next_index = index + 1
+        previous_element = elements[previous_index] if previous_index >= 0 else None
+        current_element = elements[index] if 0 <= index <= len(elements) - 1 else None
+        next_element = elements[next_index] if next_index < len(elements) - 1 else None
+        return previous_element, current_element, next_element
+
+    def create_gender_relationships(self):
+        print("Adding Gender Relationships...")
+        self.__neo4j_repository.add_gender_relationships()
 
     def __initialize_neighbour_counting(self, mapped_counties):
         self.__total_number_of_neighbours = 0
