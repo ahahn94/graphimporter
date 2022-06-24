@@ -36,10 +36,10 @@ class Neo4jDatabaseConnectionTest(unittest.TestCase):
             neo4j_database_connection.connect()
 
     def test_run_query(self):
-        statement = "MATCH (n) RETURN n LIMIT 1"
+        statement = "OPTIONAL MATCH (n) RETURN n IS NOT NULL AS Exists"
         result = self.__neo4j_database_connection.run_query(statement)
         self.assertIsInstance(result, list)
-        self.assertGreater(len(result), 0)
+        self.assertIsInstance(result[0][0], bool)
 
     def test_run_query_faulty_statement_raises_exceptions(self):
         statement = "MATCH (n) RETURN n LIMIT "
