@@ -6,7 +6,6 @@ from graphimporter.exceptions.RepositoryNotYetInitializedException import Reposi
 
 
 class DatapointRepository:
-
     __csv_dataset_loader: CsvDatasetLoader
     __datapoints: List[Datapoint] = None
     __county_names: List[str] = None
@@ -29,6 +28,9 @@ class DatapointRepository:
         return self.__datapoints is not None and self.__county_names is not None
 
     def get_county_names(self):
-        if (not self.is_initialized()):
+        if not self.is_initialized():
             raise RepositoryNotYetInitializedException
         return self.__county_names
+
+    def get_datapoints(self):
+        return self.__datapoints
