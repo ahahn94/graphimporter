@@ -89,6 +89,7 @@ class GraphImporter:
         self.create_neighbour_relationships()
         self.create_gender_relationships()
         self.create_age_group_relationships()
+        self.create_date_relationships()
         print("Completed.")
 
     def create_neighbour_relationships(self):
@@ -108,6 +109,20 @@ class GraphImporter:
             if next_group is not None:
                 self.__neo4j_repository.add_older_relationship(next_group, current_group)
 
+    def create_date_relationships(self):
+        print("Adding Date Relationships")
+        dates = self.__datapoint_repository.get_dates()
+        for index, element in enumerate(dates):
+            previous_day, current_day, next_day = self.__get_previous_current_next(dates, index)
+            if previous_day is not None:
+                self.__neo4j_repository.add_previous_day_relationship(previous_day, current_day)
+            if next_day is not None:
+                self.__neo4j_repository.add_next_day_relationship(next_day, current_day)
+
+    def create_gender_relationships(self):
+        print("Adding Gender Relationships...")
+        self.__neo4j_repository.add_gender_relationships()
+
     def __get_previous_current_next(self, elements: [], index):
         previous_index = index - 1
         next_index = index + 1
@@ -115,10 +130,6 @@ class GraphImporter:
         current_element = elements[index] if 0 <= index <= len(elements) - 1 else None
         next_element = elements[next_index] if next_index < len(elements) - 1 else None
         return previous_element, current_element, next_element
-
-    def create_gender_relationships(self):
-        print("Adding Gender Relationships...")
-        self.__neo4j_repository.add_gender_relationships()
 
     def __initialize_neighbour_counting(self, mapped_counties):
         self.__total_number_of_neighbours = 0

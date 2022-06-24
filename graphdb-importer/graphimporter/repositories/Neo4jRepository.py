@@ -86,6 +86,26 @@ class Neo4jRepository:
         statement = template.format(younger=younger, older=older)
         self.__neo4j_database_connection.run_query(statement)
 
+    def add_previous_day_relationship(self, previous_day: str, current_day: str):
+        template = "MATCH (a: Datapoint) Match (b: Datapoint) " \
+                   "WHERE a.date = \"{previousDay}\" AND b.date = \"{currentDay}\" " \
+                   "AND a.ageGroup = b.ageGroup " \
+                   "AND a.gender = b.gender " \
+                   "AND a.countyName = b.countyName " \
+                   "CREATE (a)-[r: IS_PREVIOUS_DAY_TO]->(b) RETURN r"
+        statement = template.format(previousDay=previous_day, currentDay=current_day)
+        self.__neo4j_database_connection.run_query(statement)
+
+    def add_next_day_relationship(self, next_day: str, current_day: str):
+        template = "MATCH (a: Datapoint) Match (b: Datapoint) " \
+                   "WHERE a.date = \"{nextDay}\" AND b.date = \"{currentDay}\" " \
+                   "AND a.ageGroup = b.ageGroup " \
+                   "AND a.gender = b.gender " \
+                   "AND a.countyName = b.countyName " \
+                   "CREATE (a)-[r: IS_NEXT_DAY_TO]->(b) RETURN r"
+        statement = template.format(nextDay=next_day, currentDay=current_day)
+        self.__neo4j_database_connection.run_query(statement)
+
     def __get_create_statement_for_datapoint(self, datapoint: Datapoint):
         template = "CREATE (d: {datapointDefinition});"
         return template.format(datapointDefinition=self.__datapoint_node_mapper.entity_to_node_string(datapoint))
