@@ -17,6 +17,12 @@ class DatapointNodeMapper:
         return Datapoint(node["stateName"], node["countyName"], node["ageGroup"], node["gender"], node["date"],
                          node["casesCount"], node["deathsCount"], node["recoveredCount"])
 
+    def nodes_to_entities(self, nodes_list):
+        entities = []
+        for node in nodes_list:
+            entities.append(self.node_to_entity(node))
+        return entities
+
     def __get_prepared_coordinates_string(self, entity: Datapoint):
         template = "stateName: \"{state}\", countyName: \"{county}\", ageGroup: \"{age_group}\", " \
                    "gender: \"{gender}\", date: \"{date}\""

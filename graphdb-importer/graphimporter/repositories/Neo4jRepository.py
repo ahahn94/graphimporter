@@ -40,11 +40,26 @@ class Neo4jRepository:
         exists = result_2d_array[0][0]
         return exists
 
+    def add_neighbour_county_relationship(self, base_county: str, neighbour_county: str):
+        template = "MATCH (base: Datapoint), (neighbour: Datapoint) WHERE base.countyName = '{base_county}' AND " \
+                   "neighbour.countyName = '{neighbour_county}' " \
+                   "CREATE (base)-[r:NEIGHBOUR_COUNTY]->(neighbour) " \
+                   "RETURN r "
+        statement = template.format(base_county=base_county, neighbour_county=neighbour_county)
+        self.__neo4j_database_connection.run_query(statement)
+
+    def get_neighbours(self, datapoint: Datapoint):
+        template = "MATCH (base: {baseCounty})-[r:NEIGHBOUR_COUNTY]->(neighbour) RETURN neighbour"
+        base_county = self.__datapoint_node_mapper.entity_to_node_coordinates_string(datapoint)
+        statement = template.format(baseCounty=base_county)
+        result_2d_array = self.__neo4j_database_connection.run_query(statement)
+        return self.__datapoint_node_mapper.nodes_to_entities(result_2d_array[0])
+
     def __get_create_statement_for_datapoint(self, datapoint: Datapoint):
         template = "CREATE (d: {datapointDefinition});"
         return template.format(datapointDefinition=self.__datapoint_node_mapper.entity_to_node_string(datapoint))
 
     def __get_delete_statement_for_datapoint(self, datapoint: Datapoint):
-        template = "MATCH (d: {datapointCoordinates}) DELETE d;"
+        template = "MATCH (d: {datapointCoordinates}) DETACH DELETE d;"
         datapoint_coordinates = self.__datapoint_node_mapper.entity_to_node_coordinates_string(datapoint)
         return template.format(datapointCoordinates=datapoint_coordinates)

@@ -37,6 +37,10 @@ class DatapointNodeMapperTest(unittest.TestCase):
         entity = self.__datapoint_node_mapper.node_to_entity(self.__test_node)
         self.assertEqual(entity, self.__test_datapoint)
 
+    def test_nodes_to_entities(self):
+        entities = self.__datapoint_node_mapper.nodes_to_entities([self.__test_node])
+        self.assertIn(self.__test_datapoint, entities)
+
 
 if __name__ == '__main__':
     unittest.main()

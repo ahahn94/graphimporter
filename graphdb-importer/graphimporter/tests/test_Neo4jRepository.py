@@ -15,6 +15,8 @@ class Neo4jRepositoryTest(unittest.TestCase):
 
     __datapoint_insert_delete = Datapoint("Test-Land", "Test-Kreis A", "00-04", "X", "2022-06-21", 0, 0, 0)
     __datapoint_setup_exists_read_teardown = Datapoint("Test-Land", "Test-Kreis B", "00-04", "X", "2022-06-21", 0, 0, 0)
+    __datapoint_setup_neighbour_relationship_teardown = Datapoint("Test-Land", "Test-Kreis C", "00-04", "X",
+                                                                  "2022-06-21", 0, 0, 0)
 
     @classmethod
     def setUpClass(cls):
@@ -23,6 +25,7 @@ class Neo4jRepositoryTest(unittest.TestCase):
         cls.__neo4j_repository = Neo4jRepository(neo4j_database_connection, cls.__datapoint_node_mapper)
         cls.__neo4j_repository.initialize()
         cls.__neo4j_repository.insert_datapoint(cls.__datapoint_setup_exists_read_teardown)
+        cls.__neo4j_repository.insert_datapoint(cls.__datapoint_setup_neighbour_relationship_teardown)
 
     def test_initialize(self):
         neo4j_database_connection = Neo4jDatabaseConnection(self.__server_uri, self.__username, self.__password)
@@ -49,9 +52,21 @@ class Neo4jRepositoryTest(unittest.TestCase):
         datapoint_from_database = self.__neo4j_repository.read_datapoint(self.__datapoint_setup_exists_read_teardown)
         self.assertEqual(datapoint_from_database, self.__datapoint_setup_exists_read_teardown)
 
+    def test_add_get_neighbour_county_relationship(self):
+        self.__test_add_neighbour_relationship()
+        neighbours = self.__neo4j_repository.get_neighbours(self.__datapoint_setup_exists_read_teardown)
+        self.assertIsInstance(neighbours, list)
+        self.assertIn(self.__datapoint_setup_neighbour_relationship_teardown, neighbours)
+
+    def __test_add_neighbour_relationship(self):
+        base_county = self.__datapoint_setup_exists_read_teardown.get_county()
+        neighbour_county = self.__datapoint_setup_neighbour_relationship_teardown.get_county()
+        self.__neo4j_repository.add_neighbour_county_relationship(base_county, neighbour_county)
+
     @classmethod
     def tearDownClass(cls):
         cls.__neo4j_repository.delete_datapoint(cls.__datapoint_setup_exists_read_teardown)
+        cls.__neo4j_repository.delete_datapoint(cls.__datapoint_setup_neighbour_relationship_teardown)
 
 
 if __name__ == '__main__':
