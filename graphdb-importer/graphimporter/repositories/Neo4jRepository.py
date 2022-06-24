@@ -1,10 +1,10 @@
 from graphimporter.DatapointNodeMapper import DatapointNodeMapper
-from graphimporter.Neo4jDatabaseConnection import Neo4jDatabaseConnection
 from graphimporter.entities.Datapoint import Datapoint
+from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
 
 
 class Neo4jRepository:
-    __neo4j_database_connection: Neo4jDatabaseConnection
+    __neo4j_database_connection: DatabaseConnectionInterface
     __datapoint_node_mapper: DatapointNodeMapper
 
     def __init__(self, neo4j_database_connection, datapoint_node_mapper: DatapointNodeMapper):

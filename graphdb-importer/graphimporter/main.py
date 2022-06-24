@@ -1,4 +1,5 @@
 from graphimporter.GraphImporter import GraphImporter
+from graphimporter.Neo4jDatabaseConnection import Neo4jDatabaseConnection
 
 if __name__ == '__main__':
     __server_uri: str = "bolt://127.0.0.1:7687"
@@ -8,7 +9,8 @@ if __name__ == '__main__':
     __path_to_shape_file = "tests/testfiles/de_county.shp"
     __path_to_dataset_file = "tests/testfiles/january_2022_first_day.csv"
 
-    graph_importer = GraphImporter(server_uri=__server_uri, username=__username, password=__password,
-                                   path_to_dataset_file=__path_to_dataset_file, path_to_shape_file=__path_to_shape_file)
+    neo4j_database_connection = Neo4jDatabaseConnection(__server_uri, __username, __password)
+    graph_importer = GraphImporter(neo4j_database_connection, __path_to_dataset_file,
+                                   __path_to_shape_file)
     graph_importer.import_datasets()
     graph_importer.create_relations()

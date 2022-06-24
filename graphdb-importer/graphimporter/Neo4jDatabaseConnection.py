@@ -5,9 +5,10 @@ from neo4j.exceptions import AuthError, ServiceUnavailable
 
 from graphimporter.exceptions.WrongDatabaseCredentialsException import WrongDatabaseCredentialsException
 from graphimporter.exceptions.WrongDatabaseServerUriException import WrongDatabaseServerUriException
+from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
 
 
-class Neo4jDatabaseConnection:
+class Neo4jDatabaseConnection(DatabaseConnectionInterface):
 
     __driver: Union[Neo4jDriver, Any] = None
 
@@ -36,5 +37,5 @@ class Neo4jDatabaseConnection:
             result = session.run(query)
             return result.values()
 
-    def is_initialized(self):
+    def is_initialized(self) -> bool:
         return self.__driver is not None

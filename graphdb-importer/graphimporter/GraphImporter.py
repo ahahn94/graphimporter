@@ -1,9 +1,9 @@
 from graphimporter.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.DatapointNodeMapper import DatapointNodeMapper
-from graphimporter.Neo4jDatabaseConnection import Neo4jDatabaseConnection
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
+from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
 from graphimporter.repositories.DatapointRepository import DatapointRepository
@@ -37,15 +37,13 @@ class GraphImporter:
     __shape_county_repository: ShapeCountyRepository
     __dataset_county_repository: DatasetCountyRepository
     __county_mapper: CountyMapper
-    __neo4j_database_connection: Neo4jDatabaseConnection
+    __database_connection: DatabaseConnectionInterface
     __datapoint_node_mapper: DatapointNodeMapper
     __neo4j_repository: Neo4jRepository
     __mapped_county_repository: MappedCountyRepository
 
-    def __init__(self, server_uri, username, password, path_to_dataset_file, path_to_shape_file):
-        self.__server_uri = server_uri
-        self.__username = username
-        self.__password = password
+    def __init__(self, database_connection, path_to_dataset_file, path_to_shape_file):
+        self.__database_connection = database_connection
         self.__path_to_dataset_file = path_to_dataset_file
         self.__path_to_shape_file = path_to_shape_file
         self.__initialize()
@@ -61,9 +59,8 @@ class GraphImporter:
         self.__dataset_county_repository = DatasetCountyRepository(self.__datapoint_repository,
                                                                    self.__dataset_county_factory)
         self.__county_mapper = CountyMapper(self.__dataset_county_repository, self.__shape_county_repository)
-        self.__neo4j_database_connection = Neo4jDatabaseConnection(self.__server_uri, self.__username, self.__password)
         self.__datapoint_node_mapper = DatapointNodeMapper()
-        self.__neo4j_repository = Neo4jRepository(self.__neo4j_database_connection, self.__datapoint_node_mapper)
+        self.__neo4j_repository = Neo4jRepository(self.__database_connection, self.__datapoint_node_mapper)
         self.__neo4j_repository.initialize()
         self.__datapoint_repository.initialize()
         self.__mapped_county_repository = MappedCountyRepository(self.__dataset_county_repository,
