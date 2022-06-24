@@ -49,6 +49,7 @@ class GraphImporter:
         self.__initialize()
 
     def __initialize(self):
+        print("Initializing components...")
         self.__csv_dataset_loader = CsvDatasetLoader(self.__path_to_dataset_file)
         self.__datapoint_repository = DatapointRepository(self.__csv_dataset_loader)
         self.__name_normalizer = CountyNameNormalizer()
@@ -73,33 +74,56 @@ class GraphImporter:
         if not last_datapoint_exists:
             self.__datapoints_counter = 0
             self.__total_number_of_datapoints = len(datapoints)
-            self.__dataset_counter_step_size = int(self.__total_number_of_datapoints / 1000)
+            self.__dataset_counter_step_size = int(self.__total_number_of_datapoints / 100)
             for datapoint in datapoints:
-                self.__neo4j_repository.insert_datapoint(datapoint)
-                self.__datapoints_counter += 1
-                if self.__datapoints_counter % self.__dataset_counter_step_size == 0:
-                    percent = self.__datapoints_counter / self.__total_number_of_datapoints * 100
-                    print("Creating Datapoints... {:.1f}%".format(percent))
+                self.__create_datapoint(datapoint)
+            print("Completed")
+
+    def __create_datapoint(self, datapoint):
+        self.__neo4j_repository.insert_datapoint(datapoint)
+        self.__datapoints_counter += 1
+        self.__log_progress(self.__datapoints_counter, self.__dataset_counter_step_size,
+                            self.__total_number_of_datapoints, "Creating Datapoints...")
 
     def create_relations(self):
         mapped_counties = self.__mapped_county_repository.get_mapped_counties()
+        self.__initialize_neighbour_counting(mapped_counties)
+        for mapped_county in mapped_counties:
+            self.__create_neighbours_for_county(mapped_county)
+        self.__mesh_berlin_districts()
+        print("Completed.")
+
+    def __initialize_neighbour_counting(self, mapped_counties):
         self.__total_number_of_neighbours = 0
         for county in mapped_counties:
             self.__total_number_of_neighbours += len(county.get_neighbours())
         self.__neighbours_counter = 0
-        self.__neighbours_counter_step_size = int(self.__total_number_of_neighbours / 1000)
-        for mapped_county in mapped_counties:
-            county_name = mapped_county.get_dataset_county_name()
-            for neighbour in mapped_county.get_neighbours():
-                neighbour_county_name = neighbour
-                try:
-                    self.__neighbours_counter += 1
-                    neighbour_county = self.__mapped_county_repository.get_mapped_county_by_canonic_name(neighbour)
-                    canonic_neighbour_county_name = neighbour_county.get_dataset_county_name()
-                    self.__neo4j_repository.add_neighbour_county_relationship(county_name,
-                                                                              canonic_neighbour_county_name)
-                    if self.__neighbours_counter % self.__neighbours_counter_step_size == 0:
-                        percent = self.__neighbours_counter / self.__total_number_of_neighbours * 100
-                        print("Creating Neighbours... {:.1f}%".format(percent))
-                except AttributeError as error:
-                    print(f"county: {county_name}, neighbour: {neighbour_county_name}")
+        self.__neighbours_counter_step_size = int(self.__total_number_of_neighbours / 100)
+
+    def __mesh_berlin_districts(self):
+        self.__neo4j_repository.add_neighbour_county_relationship("SK Berlin.*", "SK Berlin.*")
+
+    def __create_neighbours_for_county(self, mapped_county):
+        county_name = mapped_county.get_dataset_county_name()
+        for neighbour in mapped_county.get_neighbours():
+            self.__create_neighbour_relation(county_name, neighbour)
+            self.__neighbours_counter += 1
+            self.__log_progress(self.__neighbours_counter, self.__neighbours_counter_step_size,
+                                self.__total_number_of_neighbours, "Creating Neighbours...")
+
+    def __create_neighbour_relation(self, county_name, neighbour_county_name):
+        if neighbour_county_name == "SK Berlin":
+            # Berlin is split up into districts -> redirect to all districts.
+            canonic_neighbour_county_name = "SK Berlin.*"
+        elif neighbour_county_name == "SK Eisenach":
+            # Eisenach isn't a county anymore.
+            return
+        else:
+            neighbour_county = self.__mapped_county_repository.get_mapped_county_by_canonic_name(neighbour_county_name)
+            canonic_neighbour_county_name = neighbour_county.get_dataset_county_name()
+        self.__neo4j_repository.add_neighbour_county_relationship(county_name, canonic_neighbour_county_name)
+
+    def __log_progress(self, counter, step_size, total, description):
+        if counter % step_size == 0:
+            percent = counter / total * 100
+            print("{} {:.1f}%".format(description, percent))
