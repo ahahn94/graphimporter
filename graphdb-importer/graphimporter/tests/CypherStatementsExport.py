@@ -39,8 +39,7 @@ class CypherStatementsExport(unittest.TestCase):
         self.__dummy_database_connection.connect()
         graph_importer = GraphImporter(self.__dummy_database_connection, self.__path_to_dataset_file,
                                       self.__path_to_shape_file)
-        graph_importer.import_datasets()
-        graph_importer.create_relations()
+        graph_importer.import_datasets_and_relationships()
 
 
 if __name__ == '__main__':

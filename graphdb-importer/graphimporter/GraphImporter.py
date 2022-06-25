@@ -1,3 +1,5 @@
+import time
+
 from graphimporter.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.DatapointNodeMapper import DatapointNodeMapper
@@ -67,6 +69,14 @@ class GraphImporter:
         self.__mapped_county_repository = MappedCountyRepository(self.__dataset_county_repository,
                                                                  self.__shape_county_repository)
         self.__mapped_county_repository.initialize()
+
+    def import_datasets_and_relationships(self):
+        start_time = time.process_time()
+        self.import_datasets()
+        self.create_relations()
+        end_time = time.process_time()
+        time_between = time.strftime('%H:%M:%S', time.gmtime(end_time - start_time))
+        print("Operations took {}".format(time_between))
 
     def import_datasets(self):
         datapoints = self.__datapoint_repository.get_datapoints()
