@@ -5,20 +5,16 @@ from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
-from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader
 from graphimporter.loaders.ShapefileLoader import ShapefileLoader
+from graphimporter.repositories.DatabaseRepository import DatabaseRepository
 from graphimporter.repositories.DatapointRepository import DatapointRepository
 from graphimporter.repositories.DatasetCountyRepository import DatasetCountyRepository
 from graphimporter.repositories.MappedCountyRepository import MappedCountyRepository
-from graphimporter.repositories.Neo4jRepository import Neo4jRepository
 from graphimporter.repositories.ShapeCountyRepository import ShapeCountyRepository
 
 
 class GraphImporter:
-    __server_uri: str = None
-    __username: str = None
-    __password: str = None
     __path_to_shape_file: str = None
     __path_to_dataset_file: str = None
 
@@ -39,13 +35,12 @@ class GraphImporter:
     __shape_county_repository: ShapeCountyRepository
     __dataset_county_repository: DatasetCountyRepository
     __county_mapper: CountyMapper
-    __database_connection: DatabaseConnectionInterface
     __datapoint_node_mapper: DatapointNodeMapper
-    __neo4j_repository: Neo4jRepository
+    __database_repository: DatabaseRepository
     __mapped_county_repository: MappedCountyRepository
 
-    def __init__(self, database_connection, path_to_dataset_file, path_to_shape_file):
-        self.__database_connection = database_connection
+    def __init__(self, database_repository, path_to_dataset_file, path_to_shape_file):
+        self.__database_repository = database_repository
         self.__path_to_dataset_file = path_to_dataset_file
         self.__path_to_shape_file = path_to_shape_file
         self.__initialize()
@@ -62,9 +57,7 @@ class GraphImporter:
         self.__dataset_county_repository = DatasetCountyRepository(self.__datapoint_repository,
                                                                    self.__dataset_county_factory)
         self.__county_mapper = CountyMapper(self.__dataset_county_repository, self.__shape_county_repository)
-        self.__datapoint_node_mapper = DatapointNodeMapper()
-        self.__neo4j_repository = Neo4jRepository(self.__database_connection, self.__datapoint_node_mapper)
-        self.__neo4j_repository.initialize()
+        self.__database_repository.initialize()
         self.__datapoint_repository.initialize()
         self.__mapped_county_repository = MappedCountyRepository(self.__dataset_county_repository,
                                                                  self.__shape_county_repository)
@@ -80,7 +73,7 @@ class GraphImporter:
 
     def import_datasets(self):
         datapoints = self.__datapoint_repository.get_datapoints()
-        last_datapoint_exists = self.__neo4j_repository.datapoint_exists(datapoints[len(datapoints) - 1])
+        last_datapoint_exists = self.__database_repository.datapoint_exists(datapoints[len(datapoints) - 1])
         if not last_datapoint_exists:
             self.__datapoints_counter = 0
             self.__total_number_of_datapoints = len(datapoints)
@@ -90,7 +83,7 @@ class GraphImporter:
             print("Completed")
 
     def __create_datapoint(self, datapoint):
-        self.__neo4j_repository.insert_datapoint(datapoint)
+        self.__database_repository.insert_datapoint(datapoint)
         self.__datapoints_counter += 1
         self.__log_progress(self.__datapoints_counter, self.__dataset_counter_step_size,
                             self.__total_number_of_datapoints, "Creating Datapoints...")
@@ -115,9 +108,9 @@ class GraphImporter:
         for index, element in enumerate(age_groups):
             previous_group, current_group, next_group = self.__get_previous_current_next(age_groups, index)
             if previous_group is not None:
-                self.__neo4j_repository.add_younger_relationship(previous_group, current_group)
+                self.__database_repository.add_younger_relationship(previous_group, current_group)
             if next_group is not None:
-                self.__neo4j_repository.add_older_relationship(next_group, current_group)
+                self.__database_repository.add_older_relationship(next_group, current_group)
 
     def create_date_relationships(self):
         print("Adding Date Relationships")
@@ -125,13 +118,13 @@ class GraphImporter:
         for index, element in enumerate(dates):
             previous_day, current_day, next_day = self.__get_previous_current_next(dates, index)
             if previous_day is not None:
-                self.__neo4j_repository.add_previous_day_relationship(previous_day, current_day)
+                self.__database_repository.add_previous_day_relationship(previous_day, current_day)
             if next_day is not None:
-                self.__neo4j_repository.add_next_day_relationship(next_day, current_day)
+                self.__database_repository.add_next_day_relationship(next_day, current_day)
 
     def create_gender_relationships(self):
         print("Adding Gender Relationships...")
-        self.__neo4j_repository.add_gender_relationships()
+        self.__database_repository.add_gender_relationships()
 
     def __get_previous_current_next(self, elements: [], index):
         previous_index = index - 1
@@ -149,7 +142,7 @@ class GraphImporter:
         self.__neighbours_counter_step_size = int(self.__total_number_of_neighbours / 100)
 
     def __mesh_berlin_districts(self):
-        self.__neo4j_repository.add_neighbour_county_relationship("SK Berlin.*", "SK Berlin.*")
+        self.__database_repository.add_neighbour_county_relationship("SK Berlin.*", "SK Berlin.*")
 
     def __create_neighbours_for_county(self, mapped_county):
         county_name = mapped_county.get_dataset_county_name()
@@ -169,7 +162,7 @@ class GraphImporter:
         else:
             neighbour_county = self.__mapped_county_repository.get_mapped_county_by_canonic_name(neighbour_county_name)
             canonic_neighbour_county_name = neighbour_county.get_dataset_county_name()
-        self.__neo4j_repository.add_neighbour_county_relationship(county_name, canonic_neighbour_county_name)
+        self.__database_repository.add_neighbour_county_relationship(county_name, canonic_neighbour_county_name)
 
     def __log_progress(self, counter, step_size, total, description):
         if counter % step_size == 0:
