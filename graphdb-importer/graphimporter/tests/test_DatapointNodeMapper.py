@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
 
 
@@ -24,21 +24,21 @@ class DatapointNodeMapperTest(unittest.TestCase):
     def test_datapoint_to_node_string(self):
         expected = 'Datapoint {stateName: "Test-Land", countyName: "Test-Kreis A", ageGroup: "00-04", gender: "X", ' \
                    'date: "2022-06-21", casesCount: 0, deathsCount: 0, recoveredCount: 0}'
-        node_string = self.__datapoint_node_mapper.entity_to_node_string(self.__test_datapoint)
+        node_string = self.__datapoint_node_mapper.entity_to_dto_string(self.__test_datapoint)
         self.assertEqual(node_string, expected)
 
     def test_datapoint_to_node_coordinates_string(self):
         expected = 'Datapoint {stateName: "Test-Land", countyName: "Test-Kreis A", ageGroup: "00-04", gender: "X", ' \
                    'date: "2022-06-21"}'
-        node_string = self.__datapoint_node_mapper.entity_to_node_coordinates_string(self.__test_datapoint)
+        node_string = self.__datapoint_node_mapper.entity_to_dto_identifiers_string(self.__test_datapoint)
         self.assertEqual(node_string, expected)
 
     def test_node_to_entity(self):
-        entity = self.__datapoint_node_mapper.node_to_entity(self.__test_node)
+        entity = self.__datapoint_node_mapper.dto_to_entity(self.__test_node)
         self.assertEqual(entity, self.__test_datapoint)
 
     def test_nodes_to_entities(self):
-        entities = self.__datapoint_node_mapper.nodes_to_entities([self.__test_node])
+        entities = self.__datapoint_node_mapper.dtos_to_entities([self.__test_node])
         self.assertIn(self.__test_datapoint, entities)
 
 

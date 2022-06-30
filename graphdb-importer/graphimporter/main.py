@@ -1,4 +1,4 @@
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.GraphImporter import GraphImporter
 from graphimporter.Neo4jDatabaseConnection import Neo4jDatabaseConnection
 from graphimporter.repositories.Neo4jRepository import Neo4jRepository

@@ -1,4 +1,4 @@
-from graphimporter.CountyMapper import CountyMapper
+from graphimporter.mappers.CountyMapper import CountyMapper
 from graphimporter.entities.MappedCounty import MappedCounty
 from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException
 

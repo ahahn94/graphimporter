@@ -1,8 +1,8 @@
 import time
 
-from graphimporter.CountyMapper import CountyMapper
+from graphimporter.mappers.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory
 from graphimporter.factories.ShapeCountyFactory import ShapeCountyFactory
 from graphimporter.loaders.CsvDatasetLoader import CsvDatasetLoader

@@ -1,6 +1,6 @@
 from abc import ABC
 
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
 
 

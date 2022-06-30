@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.CountyMapper import CountyMapper
+from graphimporter.mappers.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.entities.MappedCounty import MappedCounty
 from graphimporter.factories.DatasetCountyFactory import DatasetCountyFactory

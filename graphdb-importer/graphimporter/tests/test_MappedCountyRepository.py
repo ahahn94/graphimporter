@@ -1,6 +1,5 @@
 import unittest
 
-from graphimporter.CountyMapper import CountyMapper
 from graphimporter.CountyNameNormalizer import CountyNameNormalizer
 from graphimporter.entities.MappedCounty import MappedCounty
 from graphimporter.exceptions.RepositoryNotYetInitializedException import RepositoryNotYetInitializedException

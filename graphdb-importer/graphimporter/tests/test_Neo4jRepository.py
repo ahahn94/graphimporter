@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.Neo4jDatabaseConnection import Neo4jDatabaseConnection
 from graphimporter.entities.Datapoint import Datapoint
 from graphimporter.repositories.Neo4jRepository import Neo4jRepository

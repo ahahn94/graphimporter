@@ -1,6 +1,6 @@
 import unittest
 
-from graphimporter.DatapointNodeMapper import DatapointNodeMapper
+from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.GraphImporter import GraphImporter
 from graphimporter.LoggingDummyDatabaseConnection import LoggingDummyDatabaseConnection
 from graphimporter.repositories.Neo4jRepository import Neo4jRepository
@@ -10,7 +10,7 @@ class CypherStatementsExport(unittest.TestCase):
     __dummy_database_connection = LoggingDummyDatabaseConnection("testfiles/exported_statements.cypher", "", "")
     __datapoint_node_mapper = DatapointNodeMapper()
     __path_to_shape_file = "testfiles/de_county.shp"
-    __path_to_dataset_file = "testfiles/covid_de_testing.csv"
+    __path_to_dataset_file = "testfiles/january_2022_first_day.csv"
 
     def test_something(self):
         self.__dummy_database_connection.connect()
