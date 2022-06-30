@@ -1,3 +1,4 @@
+from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
 from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
 from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
@@ -6,12 +7,12 @@ from graphimporter.repositories.DatabaseRepository import DatabaseRepository
 
 class Neo4jRepository(DatabaseRepository):
     __database_connection: DatabaseConnectionInterface
-    __datapoint_node_mapper: DatapointNodeMapper
+    __datapoint_dto_mapper: DatapointDtoMapper
 
-    def __init__(self, database_connection, datapoint_node_mapper: DatapointNodeMapper):
+    def __init__(self, database_connection, datapoint_node_mapper: DatapointDtoMapper):
         super().__init__(database_connection, datapoint_node_mapper)
         self.__database_connection = database_connection
-        self.__datapoint_node_mapper = datapoint_node_mapper
+        self.__datapoint_dto_mapper = datapoint_node_mapper
 
     def initialize(self):
         if not self.__database_connection.is_initialized():
@@ -30,14 +31,14 @@ class Neo4jRepository(DatabaseRepository):
 
     def read_datapoint(self, datapoint: Datapoint):
         template = 'MATCH (d: {datapointCoordinates}) RETURN d LIMIT 1'
-        datapoint_coordinates = self.__datapoint_node_mapper.entity_to_dto_identifiers_string(datapoint)
+        datapoint_coordinates = self.__datapoint_dto_mapper.entity_to_dto_identifiers_string(datapoint)
         statement = template.format(datapointCoordinates=datapoint_coordinates)
         result = self.__database_connection.run_query(statement)
-        return self.__datapoint_node_mapper.dto_to_entity(result[0][0])
+        return self.__datapoint_dto_mapper.dto_to_entity(result[0][0])
 
     def datapoint_exists(self, datapoint: Datapoint) -> bool:
         template = "OPTIONAL MATCH (d: {datapointDefinition}) RETURN d IS NOT NULL AS Exists"
-        statement = template.format(datapointDefinition=self.__datapoint_node_mapper.entity_to_dto_string(datapoint))
+        statement = template.format(datapointDefinition=self.__datapoint_dto_mapper.entity_to_dto_string(datapoint))
         result_2d_array = self.__database_connection.run_query(statement)
         exists = result_2d_array[0][0]
         return exists
@@ -54,10 +55,10 @@ class Neo4jRepository(DatabaseRepository):
 
     def get_neighbours(self, datapoint: Datapoint):
         template = "MATCH (base: {baseCounty})-[r:NEIGHBOUR_COUNTY]->(neighbour) RETURN neighbour"
-        base_county = self.__datapoint_node_mapper.entity_to_dto_identifiers_string(datapoint)
+        base_county = self.__datapoint_dto_mapper.entity_to_dto_identifiers_string(datapoint)
         statement = template.format(baseCounty=base_county)
         result_2d_array = self.__database_connection.run_query(statement)
-        return self.__datapoint_node_mapper.dtos_to_entities(result_2d_array[0])
+        return self.__datapoint_dto_mapper.dtos_to_entities(result_2d_array[0])
 
     def add_gender_relationships(self):
         statement = "MATCH (a: Datapoint) Match (b: Datapoint) " \
@@ -110,9 +111,9 @@ class Neo4jRepository(DatabaseRepository):
 
     def __get_create_statement_for_datapoint(self, datapoint: Datapoint):
         template = "CREATE (d: {datapointDefinition});"
-        return template.format(datapointDefinition=self.__datapoint_node_mapper.entity_to_dto_string(datapoint))
+        return template.format(datapointDefinition=self.__datapoint_dto_mapper.entity_to_dto_string(datapoint))
 
     def __get_delete_statement_for_datapoint(self, datapoint: Datapoint):
         template = "MATCH (d: {datapointCoordinates}) DETACH DELETE d;"
-        datapoint_coordinates = self.__datapoint_node_mapper.entity_to_dto_identifiers_string(datapoint)
+        datapoint_coordinates = self.__datapoint_dto_mapper.entity_to_dto_identifiers_string(datapoint)
         return template.format(datapointCoordinates=datapoint_coordinates)

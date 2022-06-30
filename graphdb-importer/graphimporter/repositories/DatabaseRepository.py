@@ -1,12 +1,13 @@
 from abc import ABC
 
+from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
 from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
 
 
 class DatabaseRepository(ABC):
 
-    def __init__(self, database_connection, datapoint_node_mapper: DatapointNodeMapper):
+    def __init__(self, database_connection, datapoint_node_mapper: DatapointDtoMapper):
         pass
 
     def initialize(self):
