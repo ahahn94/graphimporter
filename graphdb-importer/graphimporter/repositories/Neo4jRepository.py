@@ -61,12 +61,15 @@ class Neo4jRepository(DatabaseRepository):
         return self.__datapoint_dto_mapper.dtos_to_entities(result_2d_array[0])
 
     def add_gender_relationships(self):
-        statement = "MATCH (a: Datapoint) Match (b: Datapoint) " \
-                    "WHERE a.gender <> b.gender " \
-                    "AND a.ageGroup = b.ageGroup " \
-                    "AND a.date = b.date " \
-                    "AND a.countyName = b.countyName " \
-                    "CREATE (a)-[r: OTHER_GENDER]->(b) RETURN r"
+        statement = "MATCH (n: Datapoint)" \
+                    "WITH collect(DISTINCT n.date) AS dates" \
+                    "UNWIND dates AS date" \
+                    "MATCH (a: Datapoint{date: date}) MATCH (b: Datapoint{date: date})" \
+                    "WHERE a.date = b.date AND a.gender <> b.gender AND a.ageGroup = b.ageGroup " \
+                    "AND a.countyName = b.countyName" \
+                    "CREATE (a)-[r: OTHER_GENDER]->(b)" \
+                    "WITH count(r) AS createdCount" \
+                    "RETURN createdCount"
         self.__database_connection.run_query(statement)
 
     def add_younger_relationship(self, younger: str, older: str):
