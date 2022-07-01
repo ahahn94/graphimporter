@@ -48,6 +48,9 @@ class Datapoint:
                f"gender: {self.__gender}, date: {self.__date}, cases: {self.__cases}, deaths: {self.__deaths}, " \
                f"recovered: {self.__recovered} }}"
 
+    def identifiers_string(self):
+        return f"county: {self.__county}, age_group: {self.__age_group}, gender: {self.__gender}, date: {self.__date}"
+
     def __eq__(self, other):
         age_match = self.__age_group == other.get_age_group()
         cases_match = self.__cases == other.get_cases()

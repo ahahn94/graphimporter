@@ -9,7 +9,7 @@ if __name__ == '__main__':
     __password: str = "graphdb"
 
     __path_to_shape_file = "tests/testfiles/de_county.shp"
-    __path_to_dataset_file = "tests/testfiles/january_2022_first_day.csv"
+    __path_to_dataset_file = "tests/testfiles/january_2022.csv"
 
     neo4j_database_connection = Neo4jDatabaseConnection(__server_uri, __username, __password)
     datapoint_node_mapper = DatapointNodeMapper()
