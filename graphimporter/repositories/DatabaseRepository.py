@@ -1,8 +1,7 @@
 from abc import ABC
 
-from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
-from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
+from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
 
 
 class DatabaseRepository(ABC):

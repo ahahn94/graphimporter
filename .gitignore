@@ -1,2 +1,4 @@
+.idea
 graphimporter/__pycache__
 graphimporter/*/__pycache__
+graphimporter/tests/testfiles/*.cypher

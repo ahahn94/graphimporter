@@ -14,6 +14,7 @@ class LoggingDummyDatabaseConnection(DatabaseConnectionInterface):
 
     def connect(self):
         self.__log_file = open(self.__query_log_filepath, "w")
+        print(self.__log_file)
         pass
 
     def run_query(self, query):
@@ -23,7 +24,7 @@ class LoggingDummyDatabaseConnection(DatabaseConnectionInterface):
         self.__log_file.write(query + "\n")
 
     def is_initialized(self) -> bool:
-        return True
+        return self.__log_file is not None
 
     def __del__(self):
         self.__log_file.close()

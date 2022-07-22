@@ -1,7 +1,6 @@
-from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
-from graphimporter.mappers.DatapointNodeMapper import DatapointNodeMapper
 from graphimporter.entities.Datapoint import Datapoint
 from graphimporter.interfaces.DatabaseConnection import DatabaseConnectionInterface
+from graphimporter.mappers.DatapointDtoMapper import DatapointDtoMapper
 from graphimporter.repositories.DatabaseRepository import DatabaseRepository
 
 
